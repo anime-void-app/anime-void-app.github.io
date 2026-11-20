@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="VANTA AI">
+ <defs>
+  <radialGradient id="bg" cx="35%" cy="25%" r="95%"><stop stop-color="#272443"/><stop offset=".62" stop-color="#121322"/><stop offset="1" stop-color="#080914"/></radialGradient>
+  <radialGradient id="core" cx="32%" cy="23%" r="77%"><stop stop-color="#73639e"/><stop offset=".52" stop-color="#302b52"/><stop offset="1" stop-color="#111321"/></radialGradient>
+  <linearGradient id="orbit" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7dd8e5"/><stop offset=".5" stop-color="#b39aff"/><stop offset="1" stop-color="#df9fd5"/></linearGradient>
+  <linearGradient id="letter" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#c4b2ff"/></linearGradient>
+ </defs>
+ <rect x="3" y="3" width="122" height="122" rx="28" fill="url(#bg)" stroke="#615487" stroke-width="1.4"/>
+ <circle cx="64" cy="64" r="31" fill="url(#core)" stroke="#927cc6" stroke-opacity=".55"/>
+ <circle cx="64" cy="64" r="39" fill="none" stroke="#ac98ff" stroke-opacity=".23" stroke-width=".8"/>
+ <ellipse cx="64" cy="64" rx="49" ry="18" fill="none" stroke="url(#orbit)" stroke-width="1.9" transform="rotate(-34 64 64)"/>
+ <ellipse cx="64" cy="64" rx="49" ry="18" fill="none" stroke="url(#orbit)" stroke-opacity=".55" stroke-width="1.4" transform="rotate(67 64 64)"/>
+ <circle cx="31" cy="82" r="3" fill="#94dce9"/>
+ <circle cx="92" cy="39" r="2.8" fill="#d9b0ff"/>
+ <path d="M46 47 L63.5 83 L82 47" fill="none" stroke="url(#letter)" stroke-linecap="round" stroke-linejoin="round" stroke-width="9"/>
+</svg>
