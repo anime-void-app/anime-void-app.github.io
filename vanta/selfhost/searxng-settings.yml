@@ -1,0 +1,14 @@
+use_default_settings: true
+general:
+  debug: false
+  instance_name: "VANTA Search"
+search:
+  formats:
+    - html
+    - json
+server:
+  # This is overridden by SEARXNG_SECRET in .env.
+  secret_key: "CHANGE_USING_SEARXNG_SECRET"
+  limiter: false
+  public_instance: false
+  image_proxy: false
