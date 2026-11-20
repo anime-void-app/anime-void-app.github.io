@@ -17,14 +17,28 @@
     max: 'anthropic/claude-opus-5.5'
   };
   let currentResult = null;
+  let wasFreeMode = false;
   let generating = false;
   const openStudio = () => {
     if (!editor.open) editor.showModal();
     $('imgError').textContent = '';
     const config = api.configuration();
-    $('imgAuthNote').textContent = config.cloudReady
-      ? 'Облачный сервер подключён. Генерация расходует баланс API.'
-      : 'Для генерации нужно настроить облачный сервер и личный токен в ⚙ Настройках.';
+    if (config.freeCloud !== wasFreeMode) {
+      wasFreeMode = config.freeCloud;
+      const captions = config.freeCloud ?
+        ['FLUX · 4 шага (экономно)', 'FLUX · 6 шагов', 'FLUX · 8 шагов (больше детализация)'] :
+        ['⚡ FAST · экономно', '✧ PRO · универсально', '♛ ULTRA · детализация'];
+      Array.from($('imgPreset').options).forEach((option,i) => {option.textContent = captions[i];});
+    }
+    Array.from($('imgRatio').options).forEach(option => {
+      option.disabled = config.freeCloud && option.value !== '1:1';
+    });
+    if (config.freeCloud) $('imgRatio').value = '1:1';
+    $('imgAuthNote').textContent = config.freeCloud
+      ? 'Workers AI: изображения FLUX 1:1 расходуют бесплатную общую квоту 10 000 Neurons/сутки. Кнопки меняют число шагов, а не модель.'
+      : config.cloudReady
+        ? 'Облачный сервер подключён. Генерация может расходовать платный API.'
+        : 'Для генерации нужно настроить облачный сервер и личный токен в ⚙ Настройках.';
   };
   function closeStudio() { if (editor.open && !generating) editor.close(); }
   for (const id of ['openStudioSide', 'openStudioHero', 'openStudioMobile', 'openStudioTop']) {
@@ -132,7 +146,7 @@
       image.src = created.url;
       preview.appendChild(image);
       $('imgDownload').disabled = false;
-      const cost = typeof response.cost_usd === 'number' ? '$' + response.cost_usd.toFixed(4) : 'стоимость неизвестна';
+      const cost = typeof response.cost_usd === 'number' ? '$' + response.cost_usd.toFixed(4) : (api.configuration().freeCloud ? 'в пределах бесплатной квоты' : 'стоимость неизвестна');
       $('imgMeta').textContent = 'Готово · ' + ratio + ' · ' + cost + ' · модель ' + preset;
     } catch (error) {
       $('imgError').textContent = error?.message || 'Не удалось создать изображение.';
