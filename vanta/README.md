@@ -17,6 +17,35 @@ VANTA is a personally owned AI chat interface with access to local and cloud mod
 - No API keys or credentials checked into GitHub.
 - External provider processing is explicitly disclosed. No external fonts or analytics scripts.
 
+## VANTA 0.3 — Image Studio and intelligence modes
+
+The public interface now has a full-screen **Image Studio** and an animated bottom navigation bar for smartphones. Images are not faked: after you deploy the Cloudflare Worker, clicking Generate sends a paid request to OpenRouter's actual `POST /api/v1/images` endpoint.
+
+Image presets in the dropdown:
+
+| Preset | Model ID | Design goal |
+|---|---|---|
+| FAST | `google/gemini-3.1-flash-lite-image` | Quick experiments |
+| PRO | `google/gemini-3.1-flash-image` | Balanced quality |
+| ULTRA | `openai/gpt-image-2.6-sunburst` | Detailed rendering |
+
+You can choose 1:1, 9:16, 16:9, 3:4 or 4:3. Only one image is requested at a time, and the image is shown in a private browser preview with a Download button. It is **not saved in the server or a cloud gallery**. The site displays actual USD API cost if OpenRouter provides it. Different model providers may support different ratios, and a request can fail if unsupported. Each request costs money; the code does not promise free generation.
+
+Text intelligence presets:
+
+| Mode | Model | Notes |
+|---|---|---|
+| FAST | `openai/gpt-5.6-luna` | Quick low-cost tasks |
+| SMART | `openrouter/auto` | General-purpose automatic routing |
+| DEEP | `openai/gpt-5.6-sol` | Deep reasoning effort |
+| MAX | `anthropic/claude-opus-5.5` | High reasoning effort, larger response budget and higher possible cost |
+
+No model is the strongest at every task. Models and provider availability can change; check https://openrouter.ai/models and https://openrouter.ai/collections/image-models/ for current model support.
+
+The gateway has **separate image rate limiting (3 image requests/min)** alongside the chat limit. Image generation is **cloud-only in this version**: local Ollama text models cannot make pictures. Cloud mode still requires your own OpenRouter balance and Cloudflare Worker deployment (see instructions below).
+
+**Privacy note:** The image prompt is sent through Cloudflare and OpenRouter to the image model provider. The images are transmitted to your browser as encoded bytes in the HTTPS API response; none are logged or persisted by our Worker code. This is not anonymous or fully offline image generation. To avoid cost surprises, set spending limits at OpenRouter.
+
 ## 1. Publish the website
 
 Go to https://github.com/anime-void-app/anime-void-app.github.io/settings/pages
