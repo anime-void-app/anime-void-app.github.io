@@ -48,6 +48,8 @@
       button.setAttribute('aria-pressed', selected ? 'true' : 'false');
     });
     if (motionInput) motionInput.checked = motionEnabled;
+    const chromeBar = document.querySelector('meta[name="theme-color"]');
+    if (chromeBar) chromeBar.content = theme === 'arctic' ? '#061318' : theme === 'ember' ? '#151010' : '#080910';
     const themeLabel = $('themeLabel');
     if (themeLabel) themeLabel.textContent = theme.toUpperCase();
   };
