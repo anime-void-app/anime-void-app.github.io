@@ -128,6 +128,10 @@ export default {
     let temperature = Number(body.temperature);
     if (!Number.isFinite(temperature)) temperature = 0.6;
     temperature = Math.max(0, Math.min(1.5, temperature));
+    const deepModel = model === "openai/gpt-5.6-sol" || model === "anthropic/claude-opus-5.5";
+    const cloudRequest = { model, messages, stream: true, max_tokens: deepModel ? 8192 : 4096 };
+    if (deepModel) cloudRequest.reasoning = { effort: "high" };
+    else cloudRequest.temperature = temperature;
     try {
       const upstream = await fetch(CHAT_API, {
         method: "POST",
@@ -137,7 +141,7 @@ export default {
           "HTTP-Referer": "https://anime-void-app.github.io/vanta/",
           "X-Title": "VANTA AI",
         },
-        body: JSON.stringify({ model, messages, temperature, max_tokens: 4096, stream: true }),
+        body: JSON.stringify(cloudRequest),
         redirect: "error",
         signal: request.signal,
       });
