@@ -14,6 +14,7 @@
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <link rel="stylesheet" href="studio.css">
+<link rel="stylesheet" href="visuals.css">
 </head>
 <body>
 <div class="app">
@@ -25,12 +26,21 @@
  <div class="sidebar-foot"><div class="guard"><i>⛨</i><div><b>Только твоё пространство</b><small>История остаётся в браузере</small></div></div><button id="settingsBtn" class="side-settings"><span>⚙ &nbsp; Настройки интеллекта</span><span>›</span></button></div>
 </aside><div id="scrim" class="scrim"></div>
 <main class="main">
- <header class="topbar"><div class="crumb"><button id="menu" class="mini-btn menu" aria-label="Открыть меню">☰</button><span>VANTA / SYSTEM</span><span style="color:#52536d">/</span><b>WORKSPACE</b></div><div class="topright"><span class="status"><i class="status-dot"></i><span id="status">Сервер не подключён</span></span><button id="openStudioTop" class="mini-btn" title="Генерация изображений" aria-label="Студия изображений">✧</button><button id="topSettings" class="mini-btn" aria-label="Настройки">⚙</button></div></header>
+ <header class="topbar"><div class="crumb"><button id="menu" class="mini-btn menu" aria-label="Открыть меню">☰</button><span>VANTA / SYSTEM</span><span style="color:#52536d">/</span><b>WORKSPACE</b></div><div class="topright"><span id="themeLabel" class="vanta-chip">NEBULA</span><span class="status"><i class="status-dot"></i><span id="status">Сервер не подключён</span></span><button id="openStudioTop" class="mini-btn" title="Генерация изображений" aria-label="Студия изображений">✧</button><button id="topSettings" class="mini-btn" aria-label="Настройки">⚙</button></div></header>
  <div id="stage" class="stage">
-  <section id="hero" class="hero"><div class="ambient"></div>
-   <div class="orbit-box"><span class="orbit"></span><span class="orbit two"></span><span class="orbit three"></span><div class="eclipse"></div></div>
-   <div class="serial">PRIVATE INTELLIGENCE · EST. 2026</div><h1>Мыслить за <em>пределами.</em></h1>
-   <p>Без лишнего шума. Без чужих интерфейсов. С доступом к разным моделям ИИ, своим характером и приватными диалогами.</p>
+  <section id="hero" class="hero"><div class="ambient" aria-hidden="true"></div>
+   <canvas id="neuralField" class="cosmos-canvas" aria-hidden="true"></canvas><div class="cosmos-grid" aria-hidden="true"></div>
+   <div id="vantaOrbit" class="orbit-console vanta-orbit-shell" role="img" aria-label="Анимированное нейронное ядро VANTA с орбитами">
+    <span class="orbit-halo" aria-hidden="true"></span><span class="orbit-plate" aria-hidden="true"></span>
+    <span class="orbit-lane" aria-hidden="true"></span><span class="orbit-lane second" aria-hidden="true"></span><span class="orbit-lane third" aria-hidden="true"></span>
+    <span class="orbit-sphere" aria-hidden="true"><span class="core-glyph">V</span></span>
+    <span class="orbit-coordinate a" aria-hidden="true">VANTA / 04<br>CORE</span>
+    <span class="orbit-coordinate b" aria-hidden="true">NEURAL<br>RESONANCE</span>
+   </div>
+   <div class="serial">PRIVATE INTELLIGENCE / VERSION 04</div>
+   <h1>Мыслить за <em>пределами.</em></h1>
+   <p>Твоя персональная интеллектуальная вселенная. Свобода выбора моделей, управление характером и создание изображений — в одном пространстве.</p>
+   <div class="core-readout" aria-live="off"><span class="readout-pulse" aria-hidden="true"></span><span id="coreCaption">AWAITING NEURAL LINK</span><span class="bar" aria-hidden="true"></span><b id="coreDetail">STANDBY</b></div>
    <div class="prompts"><button class="prompt" data-text="Помоги мне спроектировать необычный сайт будущего, предложи архитектуру и код."><span class="symbol">⌘</span><b>Создать что-то великое</b><small>Код · идеи · проекты</small></button>
    <button class="prompt" data-text="Помоги разобраться в очень сложной научной теме с примерами и аналогиями."><span class="symbol">✧</span><b>Исследовать неизвестное</b><small>Наука · мышление · знания</small></button>
    <button class="prompt" data-text="Предложи неожиданный сюжет для тёмного фэнтези с глубокой философией."><span class="symbol">◈</span><b>Вообразить новый мир</b><small>Истории · творчество · стиль</small></button>
@@ -58,6 +68,15 @@
  <label class="field" for="modelCustom">Свой ID модели (необязательно)</label><input id="modelCustom" autocomplete="off" placeholder="Не заполняй, если не знаешь ID модели"><div class="field-help">Оставь пустым: режимы FAST / SMART / DEEP / MAX выбираются отдельно.</div>
  <label class="field" for="prompt">Характер ИИ / системная инструкция</label><textarea id="prompt" rows="3" maxlength="3500">Ты VANTA AI, личный интеллектуальный помощник. Отвечай вдумчиво, честно, точно и содержательно. Не выдумывай факты. Пиши на языке пользователя.</textarea>
  <label class="row-switch"><input id="ephemeral" type="checkbox"> Приватный сеанс — не записывать историю</label>
+ <section class="visual-settings" aria-labelledby="visualLabel">
+  <div id="visualLabel" class="visual-settings-title">✦ Внешний вид / VANTA VISUALS</div>
+  <div class="theme-choices" role="group" aria-label="Цветовая тема">
+   <button class="theme-choice" type="button" data-theme="nebula" aria-pressed="true"><span class="theme-swatch" aria-hidden="true"></span>NEBULA</button>
+   <button class="theme-choice" type="button" data-theme="arctic" aria-pressed="false"><span class="theme-swatch" aria-hidden="true"></span>ARCTIC</button>
+   <button class="theme-choice" type="button" data-theme="ember" aria-pressed="false"><span class="theme-swatch" aria-hidden="true"></span>EMBER</button>
+  </div>
+  <label class="motion-toggle"><input id="motionChoice" type="checkbox" checked> Атмосферные эффекты и движение</label>
+ </section>
  <div class="modal-buttons"><button id="export" class="btn">Экспорт истории</button><button id="clear" class="btn">Очистить историю</button><button id="saveSettings" class="btn accent">Сохранить настройки</button></div>
  <div class="help">Нужна помощь с запуском? <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/free-worker/README.md" target="_blank" rel="noopener noreferrer">Бесплатно с телефона (0 ₽)</a> · <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/selfhost/README.md" target="_blank" rel="noopener noreferrer">Свой ИИ без API-лимитов</a> · <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/README.md" target="_blank" rel="noopener noreferrer">Облачное подключение</a>. Пока сервер не запущен, чат и генерация картинок недоступны.</div>
 </dialog>
@@ -168,4 +187,5 @@ window.VantaBridge=Object.freeze({
 render();ping();
 })();
 </script>
-<script src="studio.js"></script></body></html>
+<script src="studio.js"></script>
+<script src="visuals.js"></script></body></html>
