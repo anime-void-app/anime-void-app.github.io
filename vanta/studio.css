@@ -105,3 +105,8 @@ body{background:#080911}
 
 .power-status{text-align:right;font-size:10px;color:#777994;min-height:16px;padding:0 3px 4px}
 @media(max-width:680px){.power-status{display:none}}
+
+.search-toggle{padding:8px 10px;border:1px solid #424359;border-radius:10px;background:#151728;color:#959bb4;font-weight:700;white-space:nowrap;font-size:11px;transition:background .2s,border .2s}
+.search-toggle.active{border-color:#6fa998;color:#bceada;background:#203830}
+.search-toggle[hidden]{display:none!important}
+@media(max-width:680px){.search-toggle{font-size:10px;padding:6px 8px}.model-controls{flex-wrap:wrap}.composer-row{gap:7px}}
