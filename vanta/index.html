@@ -61,6 +61,49 @@
  <div class="modal-buttons"><button id="export" class="btn">Экспорт истории</button><button id="clear" class="btn">Очистить историю</button><button id="saveSettings" class="btn accent">Сохранить настройки</button></div>
  <div class="help">Подробная настройка облака: <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/README.md" target="_blank" rel="noopener noreferrer">инструкция</a>. Локальная версия работает через Ollama и Tailscale. Без backend сайт не генерирует ответы.</div>
 </dialog>
+
+<dialog id="studio" class="studio-modal" aria-labelledby="studioHeading">
+ <div class="studio-wrap">
+  <div class="studio-left">
+   <div class="studio-kicker">✦ VANTA VISUAL LAB / 2026</div>
+   <h2 id="studioHeading" class="studio-heading">Искусство из <em>мысли.</em></h2>
+   <div class="studio-lead">От реалистичной фотографии до аниме и фантастических миров. Результат создаёт настоящая модель ИИ.</div>
+   <label class="studio-label" for="imgPrompt">ЧТО СОЗДАЁМ?</label>
+   <textarea id="imgPrompt" maxlength="4000" class="studio-textarea" placeholder="Например: кинематографичный портрет девушки с серебряными волосами под дождём в неоновом Токио, отражения, мягкое освещение..."></textarea>
+   <div class="studio-minirow">
+    <button type="button" class="studio-tag" data-image-style="photorealistic, natural skin texture, cinematic lens and lighting">📷 Фото</button>
+    <button type="button" class="studio-tag" data-image-style="premium anime illustration, beautiful linework, atmospheric lighting">✦ Аниме</button>
+    <button type="button" class="studio-tag" data-image-style="epic dark fantasy art, highly detailed, mystical atmosphere">◈ Фэнтези</button>
+    <button type="button" class="studio-tag" data-image-style="elegant editorial design, careful composition, refined typography">⌘ Дизайн</button>
+   </div>
+   <div class="studio-cols">
+    <div><label for="imgPreset" class="studio-label">МОЩНОСТЬ РИСОВАНИЯ</label>
+     <select id="imgPreset" class="studio-select">
+      <option value="quick">⚡ FAST · экономно</option>
+      <option value="balanced" selected>✧ PRO · универсально</option>
+      <option value="ultra">♛ ULTRA · детализация</option>
+     </select>
+    </div>
+    <div><label for="imgRatio" class="studio-label">ФОРМАТ КАДРА</label>
+     <select id="imgRatio" class="studio-select">
+      <option value="1:1">1:1 · квадрат</option><option value="9:16">9:16 · TikTok / телефон</option><option value="16:9">16:9 · обои</option><option value="3:4">3:4 · портрет</option><option value="4:3">4:3 · альбом</option>
+     </select>
+    </div>
+   </div>
+   <button id="imgGo" class="studio-go" type="button">✦ Создать изображение</button>
+   <div id="imgError" class="studio-error" role="alert"></div>
+   <div id="imgAuthNote" class="studio-hint"></div>
+   <div class="studio-hint">Генерация изображений расходует баланс облачного API. Результат хранится в этой вкладке, пока ты его не скачал.</div>
+   <button type="button" id="studioOpenSettings" class="btn" style="margin-top:13px;align-self:flex-start">⚙ Подключить сервер</button>
+  </div>
+  <div class="studio-right">
+   <div class="studio-topline"><span>LIVE CANVAS / VISUAL PREVIEW</span><button id="studioClose" class="studio-close" type="button" aria-label="Закрыть студию">×</button></div>
+   <div id="imgPreview" class="studio-preview"><div class="empty"><span>◉</span><strong>Пока чистый холст</strong><p>Опиши сцену и выбери качество. Готовая работа появится здесь.</p></div></div>
+   <div id="imgProgress" class="studio-progress" hidden><span>Синтезируем изображение…</span></div>
+   <div class="studio-result-bottom"><span id="imgMeta">Ожидание запроса · 1 изображение</span><button type="button" id="imgDownload" disabled>↓ Скачать</button></div>
+  </div>
+ </div>
+</dialog>
 <script>
 (function(){
 'use strict';
