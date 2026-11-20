@@ -8,8 +8,8 @@ const ORIGIN_DEFAULT = "https://anime-void-app.github.io";
 const TEXT_MODELS = Object.freeze({
   "openai/gpt-5.6-luna": "@cf/zai-org/glm-4.7-flash",
   "openrouter/auto": "@cf/google/gemma-4-26b-a4b-it",
-  "openai/gpt-5.6-sol": "@cf/qwen/qwen3-30b-a3b-fp8",
-  "anthropic/claude-opus-5.5": "@cf/nvidia/nemotron-3-120b-a12b",
+  "openai/gpt-5.6-sol": "@cf/qwen/qwen3.8-27b",
+  "anthropic/claude-opus-5.5": "@cf/qwen/qwen3.8-27b",
 });
 const IMAGE_MODEL = "@cf/black-forest-labs/flux-1-schnell";
 const IMAGE_STEPS = Object.freeze({
@@ -162,7 +162,7 @@ export default {
     let messages;
     try { messages = cleanMessages(body); } catch(e) { return json(400,{error:e.message}); }
     // Keep free inference modest. Larger MAX models consume the same daily budget faster.
-    const maxTokens = model.includes("nemotron") ? 1100 : 950;
+    const maxTokens = body.model === "anthropic/claude-opus-5.5" ? 1700 : 900;
     try {
       const native = await env.AI.run(model,{messages,max_tokens:maxTokens,stream:true});
       if (native && typeof native.pipeThrough === "function") {
