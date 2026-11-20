@@ -1,0 +1,29 @@
+{
+  "name": "vanta-ai-free",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-19",
+  "ai": {
+    "binding": "AI"
+  },
+  "vars": {
+    "ALLOWED_ORIGIN": "https://anime-void-app.github.io"
+  },
+  "ratelimits": [
+    {
+      "name": "CHAT_RATE_LIMITER",
+      "namespace_id": "3011",
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
+    },
+    {
+      "name": "IMAGE_RATE_LIMITER",
+      "namespace_id": "3012",
+      "simple": {
+        "limit": 2,
+        "period": 60
+      }
+    }
+  ]
+}
