@@ -143,6 +143,28 @@ document.querySelectorAll('.prompt').forEach(function(el){el.onclick=function(){
 document.onkeydown=function(e){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();chatNew()}if(e.key==='Escape')closeNav()};
 $('clear').onclick=function(){if(confirm('Удалить всю историю переписок в этом браузере?')){state.chats=[];state.active=null;save();render();notify('История удалена')}};
 $('export').onclick=function(){var data=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),chats:state.chats},null,2)],{type:'application/json'});var u=URL.createObjectURL(data);var a=document.createElement('a');a.href=u;a.download='vanta-history.json';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
+
+window.VantaBridge=Object.freeze({
+ configuration:function(){return {mode:state.mode,model:state.model,cloudReady:!!(state.endpoint&&accessToken)}},
+ openSettings:openSettings,
+ selectCloudModel:function(model){
+  if(!['openai/gpt-5.6-luna','openrouter/auto','openai/gpt-5.6-sol','anthropic/claude-opus-5.5'].includes(model))return;
+  state.mode='cloud';state.model=model;save();render();ping();
+ },
+ generateImage:async function(payload){
+  if(!state.endpoint||!accessToken)throw Error('Открой настройки, введи URL защищённого сервера и свой личный токен.');
+  if(!state.endpoint.startsWith('https://'))throw Error('Генерация доступна только через HTTPS.');
+  var r=await fetch(state.endpoint+'/api/images',{
+   method:'POST',mode:'cors',cache:'no-store',
+   headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken},
+   body:JSON.stringify(payload)
+  });
+  var data=await r.json().catch(function(){return {error:'Неверный ответ сервера изображений'}});
+  if(!r.ok)throw Error(data.error||('Ошибка сервера: '+r.status));
+  return data;
+ }
+});
 render();ping();
 })();
-</script></body></html>
+</script>
+<script src="studio.js"></script></body></html>
