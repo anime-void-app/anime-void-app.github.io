@@ -18,6 +18,11 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 BASE = Path(__file__).resolve().parent
 STATIC = BASE / "static"
 ORIGIN = "https://anime-void-app.github.io"
+ADDITIONAL_ORIGIN = os.environ.get("VANTA_ALLOWED_ORIGIN", "").strip().rstrip("/")
+if ADDITIONAL_ORIGIN:
+    parsed_origin = urlparse(ADDITIONAL_ORIGIN)
+    if parsed_origin.scheme != "https" or not parsed_origin.hostname or parsed_origin.path not in ("", "/"):
+        raise RuntimeError("VANTA_ALLOWED_ORIGIN must be an HTTPS origin without a path")
 OLLAMA = os.environ.get("OLLAMA_URL", "http://ollama:11434").rstrip("/")
 SEARXNG = os.environ.get("SEARXNG_URL", "http://searxng:8080").rstrip("/")
 SECRET = os.environ.get("VANTA_ACCESS_TOKEN", "")
@@ -37,7 +42,7 @@ if len(SECRET) < 32 or SECRET.startswith("CHANGE_"):
 app = FastAPI(title="VANTA Sovereign", docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[ORIGIN],
+    allow_origins=[ORIGIN] + ([ADDITIONAL_ORIGIN] if ADDITIONAL_ORIGIN else []),
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
     allow_credentials=False,
