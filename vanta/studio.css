@@ -110,3 +110,19 @@ body{background:#080911}
 .search-toggle.active{border-color:#6fa998;color:#bceada;background:#203830}
 .search-toggle[hidden]{display:none!important}
 @media(max-width:680px){.search-toggle{font-size:10px;padding:6px 8px}.model-controls{flex-wrap:wrap}.composer-row{gap:7px}}
+
+/* Mobile settings: keep save actions visible on short phone screens */
+.modal{max-height:min(92dvh,900px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.modal-buttons{position:sticky;bottom:-27px;padding:12px 0 calc(12px + env(safe-area-inset-bottom));background:#161725;z-index:2}
+@media(max-width:680px){
+ .modal{width:calc(100vw - 16px);height:calc(100dvh - 20px);max-height:calc(100dvh - 20px);padding:18px 16px}
+ .modal h2{font-size:22px}
+ .modal .desc{margin-bottom:12px}
+ .modal-buttons{bottom:-18px;margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:10px 0 calc(8px + env(safe-area-inset-bottom))}
+ .modal-buttons .btn{min-width:0;padding:12px 8px;font-size:12px}
+ .modal-buttons #saveSettings{grid-column:1 / -1;grid-row:1;min-height:44px}
+ .modal-buttons #export{grid-column:1;grid-row:2}
+ .modal-buttons #clear{grid-column:2;grid-row:2}
+ .modal .field{margin:12px 0 6px}
+ .modal .field-help{font-size:10px}
+}
