@@ -1,5 +1,18 @@
 # VANTA AI — personal hybrid AI
 
+## Новый вариант: VANTA Sovereign — модель и поиск на собственном сервере
+
+Если не хочешь зависеть от OpenRouter или суточных лимитов Cloudflare Workers AI, используй независимый backend на **Ollama + SearXNG**. Он запускает скачанные веса модели на твоём ПК или арендованном GPU, сам делает поиск и добавляет источники в ответы. Квоты сообщений/день нет, но скорость и доступность зависят от оборудования и внешних поисковых систем.
+
+**[Инструкция и исходники самостоятельного режима](selfhost/README.md)**
+
+Запуск: Docker Desktop → selfhost/.env со случайными секретами → docker compose up -d --build → docker compose exec ollama ollama pull qwen3:4b → личный сайт http://127.0.0.1:8765. С телефона можно зайти по приватному HTTPS через Tailscale Serve. Настоящий облачный мощный сервер требует отдельного GPU-хостинга.
+
+В самостоятельном режиме живой поиск доступен через кнопку «🌐 Поиск». Генерация картинок локально пока не реализована: Visual Lab требует отдельный облачный шлюз или будущий diffusion-backend.
+
+---
+
+
 Owner: GitHub account anime-void-app.
 
 Frontend (when GitHub Pages is enabled): https://anime-void-app.github.io/vanta/
