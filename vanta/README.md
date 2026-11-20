@@ -1,0 +1,96 @@
+# VANTA AI — personal hybrid AI
+
+Owner: GitHub account anime-void-app.
+
+Frontend (when GitHub Pages is enabled): https://anime-void-app.github.io/vanta/
+
+Source: https://github.com/anime-void-app/anime-void-app.github.io/tree/main/vanta
+
+VANTA is a personally owned AI chat interface with access to local and cloud models. It is NOT a newly trained foundation model. GitHub Pages hosts only static HTML/CSS/JS — it cannot run large language models.
+
+## Available features
+
+- Responsive dark interface with animated eclipse, conversations, model switching and custom personality.
+- Local browser chat history, export, delete and optional session-only conversations.
+- Cloud OpenRouter Auto, selected cloud models, and custom model IDs.
+- Streaming output from the Cloudflare Worker gateway.
+- No API keys or credentials checked into GitHub.
+- External provider processing is explicitly disclosed. No external fonts or analytics scripts.
+
+## 1. Publish the website
+
+Go to https://github.com/anime-void-app/anime-void-app.github.io/settings/pages
+
+If Pages is not enabled, select **Deploy from a branch**, branch **main**, folder **/ (root)** and Save. Once GitHub completes its build, visit https://anime-void-app.github.io/vanta/.
+
+The existing root redirect for Anime Void is unchanged. All VANTA files are inside the vanta directory. If the repository already uses other Pages settings, inspect them carefully before changing them.
+
+## 2. Activate powerful cloud AI
+
+Create your own accounts at https://dash.cloudflare.com and https://openrouter.ai/.
+
+- Cloudflare Workers hosts the API gateway. Your Cloudflare account owns it.
+- OpenRouter routes your prompt to models; model API use can cost money.
+- You must deploy this gateway and configure its private secrets. No secret is stored in public GitHub.
+
+On a computer with Node.js, download/clone the repository. In a terminal enter:
+
+~~~powershell
+cd vanta\gateway
+npx wrangler login
+npx wrangler secret put OPENROUTER_API_KEY
+npx wrangler secret put VANTA_ACCESS_TOKEN
+npx wrangler deploy
+~~~
+
+For VANTA_ACCESS_TOKEN use a NEW random secret of 32+ characters; it is not your OpenRouter key and not your GitHub password. You can generate one using:
+
+~~~powershell
+python -c "import secrets; print(secrets.token_urlsafe(36))"
+~~~
+
+Do not share either secret in a chat, commit, GitHub issue or screenshot.
+
+The gateway includes Cloudflare rate limiting of around 12 chat requests per minute per Cloudflare location, plus a mandatory access token and strict CORS restrictions. For production, also configure spending caps and optionally Cloudflare Access/WAF. Rate limiting is approximate and does not guarantee a fixed spending cap.
+
+Once deployment completes, Wrangler prints the new HTTPS address, typically:
+
+~~~text
+https://vanta-ai-gateway.<your-cloudflare-id>.workers.dev
+~~~
+
+Go to the VANTA website, open **Settings**, paste that URL into the server URL field, and enter **VANTA_ACCESS_TOKEN** (not OPENROUTER_API_KEY). Save and send a test question.
+
+## 3. Local model mode + phone access
+
+Install Ollama on Windows, then pull a model:
+
+~~~powershell
+ollama pull qwen3:4b
+~~~
+
+The local Python VANTA bundle (separate from this GitHub Pages frontend) has a server.py and a browser UI that can be opened on localhost. You can replace the local bundle's index.html with the new VANTA page to reuse this design. The Python backend expects /api/chat and /api/status.
+
+For your own phone, run the local site through Tailscale **Serve**, not **Funnel**. Tailscale Serve keeps it inside your private Tailnet; Funnel exposes an internet-accessible address. Configure password authentication before exposing the Python service, and do not port-forward ports 8765 or 11434.
+
+Public GitHub Pages is NOT a relay into your home computer. To use an Ollama model from your phone, open the private Tailscale-hosted website, or set up a separate authenticated private API.
+
+## Privacy and reality check
+
+- Chat histories are stored unencrypted in the browser's localStorage unless session-only mode is on. This is NOT end-to-end encryption. Do not use saved-history mode on a shared device.
+- The app access token stays in memory in the frontend and is cleared when the page reloads.
+- In cloud mode: browser -> your Cloudflare Worker -> OpenRouter -> chosen model provider. Those services can process content and metadata and may enforce their own policies.
+- GitHub may see website requests. Cloudflare, OpenRouter and their providers may have logs. No hosted website can promise perfect anonymity.
+- In local mode, Ollama can operate without routing prompts to a remote model provider.
+- The VANTA Worker does not add an extra topic filter, but cannot remove provider-specific model restrictions.
+- Strongest models evolve constantly. OpenRouter Auto is convenient but is not guaranteed to choose the objectively strongest model for every task.
+- No model training is happening here; pre-trained models are selected and run or rented.
+
+## Troubleshooting
+
+No AI responses: deploy the Worker first, add both secrets, configure the URL and token in Settings.
+401: wrong VANTA_ACCESS_TOKEN.
+429: approximate rate limit reached.
+502: upstream unavailable, model unsupported, credit exhausted or API key wrong.
+GitHub 404: enable Pages or check publishing source.
+Local mode on public Pages: use the dedicated localhost/Tailscale interface.
