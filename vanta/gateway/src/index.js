@@ -37,7 +37,9 @@ export default {
     if (url.pathname === "/api/health" && request.method === "GET") {
       return json(200, { ok: true, configured: !!(env.OPENROUTER_API_KEY && env.VANTA_ACCESS_TOKEN), provider: "OpenRouter" });
     }
-    if (url.pathname !== "/api/chat" || request.method !== "POST") return json(404, { error: "Маршрут не найден." });
+    const isImage = url.pathname === "/api/images";
+    const isChat = url.pathname === "/api/chat";
+    if ((!isChat && !isImage) || request.method !== "POST") return json(404, { error: "Маршрут не найден." });
     if (!env.OPENROUTER_API_KEY || !env.VANTA_ACCESS_TOKEN) return json(503, { error: "Владелец ещё не подключил ключ API и пароль." });
     const authorization = request.headers.get("Authorization") || "";
     if (!authorization.startsWith("Bearer ") || !secureEqual(authorization.slice(7), env.VANTA_ACCESS_TOKEN)) {
@@ -48,7 +50,9 @@ export default {
       return json(413, { error: "Недопустимый формат или размер запроса." });
     }
     if (!env.CHAT_RATE_LIMITER) return json(503, { error: "Лимитер запросов не настроен на сервере." });
-    const { success } = await env.CHAT_RATE_LIMITER.limit({ key: "private-owner" });
+    const limiter = isImage ? env.IMAGE_RATE_LIMITER : env.CHAT_RATE_LIMITER;
+    if (!limiter) return json(503, { error: "Серверный лимитер не настроен." });
+    const { success } = await limiter.limit({ key: isImage ? "owner-images" : "private-owner" });
     if (!success) return json(429, { error: "Лимит запросов временно исчерпан." });
     let body;
     try {
@@ -56,6 +60,55 @@ export default {
       if (input.length > 250000) return json(413, { error: "Слишком большой запрос." });
       body = JSON.parse(input);
     } catch (_) { return json(400, { error: "Неверный JSON." }); }
+    if (isImage) {
+      const imageModels = new Set([
+        "google/gemini-3.1-flash-lite-image",
+        "google/gemini-3.1-flash-image",
+        "openai/gpt-image-2.6-sunburst",
+      ]);
+      const model = body?.model;
+      const prompt = body?.prompt;
+      const aspectRatio = body?.aspect_ratio || "1:1";
+      if (!imageModels.has(model)) return json(400, { error: "Эта модель изображений не поддерживается." });
+      if (typeof prompt !== "string" || prompt.trim().length < 3 || prompt.length > 4000) {
+        return json(400, { error: "Описание изображения должно содержать от 3 до 4000 символов." });
+      }
+      if (!["1:1","16:9","9:16","4:3","3:4"].includes(aspectRatio)) {
+        return json(400, { error: "Недопустимое соотношение сторон." });
+      }
+      const payload = { model, prompt: prompt.trim(), aspect_ratio: aspectRatio, n: 1 };
+      // This is intentionally a buffered API: one generated picture per request.
+      try {
+        const upstream = await fetch("https://openrouter.ai/api/v1/images", {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + env.OPENROUTER_API_KEY,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://anime-void-app.github.io/vanta/",
+            "X-Title": "VANTA AI Image Studio",
+          },
+          body: JSON.stringify(payload), redirect: "error", signal: request.signal,
+        });
+        if (!upstream.ok) {
+          const message = upstream.status === 402 ? "Недостаточно средств OpenRouter для генерации изображения." :
+            "Сервис изображений вернул HTTP " + upstream.status + ". Проверь баланс, модель и её параметры.";
+          return json(502, { error: message });
+        }
+        const result = await upstream.json();
+        const images = (Array.isArray(result.data) ? result.data : [])
+          .filter(i => typeof i?.b64_json === "string" && i.b64_json.length < 15000000)
+          .slice(0, 1)
+          .map(i => ({
+            b64_json: i.b64_json,
+            media_type: ["image/png", "image/jpeg", "image/webp"].includes(i.media_type) ? i.media_type : "image/png"
+          }));
+        if (!images.length) return json(502, { error: "Модель не вернула изображение в поддерживаемом формате." });
+        const cost = Number(result?.usage?.cost);
+        return json(200, { model, images, cost_usd: Number.isFinite(cost) ? cost : null });
+      } catch (_) {
+        return json(503, { error: "Не удалось завершить генерацию. Проверь доступность API." });
+      }
+    }
     let model = body?.model || "openrouter/auto";
     if (typeof model !== "string") return json(400, { error: "Неверная модель." });
     model = model.replace(/^cloud:/, "");
