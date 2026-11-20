@@ -1,0 +1,15 @@
+# Add to compose.yaml ONLY on a GPU-capable Linux VM with Docker Compose.
+# Connects VANTA to your own Cloudflare domain using a private, outbound tunnel.
+# Configuration of DNS public hostname and service in Cloudflare dashboard is required.
+# Requires a real Cloudflare Tunnel token, provided only in local .env (not GitHub).
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:?Add Cloudflare Tunnel token to your private .env file}
+    depends_on:
+      - app
+    networks:
+      - private
+    restart: unless-stopped
