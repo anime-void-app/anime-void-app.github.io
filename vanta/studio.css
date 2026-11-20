@@ -102,3 +102,6 @@ body{background:#080911}
 @media(prefers-reduced-motion:reduce){.logo .mark:before,.orbit,.orbit.two,.orbit.three,.studio-progress:before{animation:none!important}}
 
 .studio-progress[hidden]{display:none!important}
+
+.power-status{text-align:right;font-size:10px;color:#777994;min-height:16px;padding:0 3px 4px}
+@media(max-width:680px){.power-status{display:none}}
