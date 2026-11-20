@@ -100,3 +100,5 @@ body{background:#080911}
   .studio-preview{height:290px;min-height:290px}
 }
 @media(prefers-reduced-motion:reduce){.logo .mark:before,.orbit,.orbit.two,.orbit.three,.studio-progress:before{animation:none!important}}
+
+.studio-progress[hidden]{display:none!important}
