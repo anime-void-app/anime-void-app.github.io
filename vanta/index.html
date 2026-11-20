@@ -52,14 +52,14 @@
 </main></div>
 <dialog id="settings" class="modal">
  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="serial" style="margin:0">VANTA / CONTROL PANEL</span><button id="closeSettings" class="mini-btn" aria-label="Закрыть">×</button></div>
- <h2>Настрой свой интеллект</h2><p class="desc">Сайт уже твой. Для реальных ответов подключи защищённый backend — API-ключ провайдера никогда не сохраняется в браузере или GitHub.</p>
- <label class="field" for="endpoint">URL твоего сервера (Cloudflare Worker)</label><input id="endpoint" autocomplete="off" spellcheck="false" placeholder="https://vanta-ai-gateway....workers.dev"><div class="field-help">Только HTTPS. Не вставляй сюда ключ OpenRouter.</div>
- <label class="field" for="access">Личный токен входа</label><input id="access" type="password" autocomplete="off" placeholder="VANTA_ACCESS_TOKEN (из настроек сервера)"><div class="field-help">Не сохраняется на диске, только до перезагрузки вкладки.</div>
- <label class="field" for="modelCustom">Свой ID модели (необязательно)</label><input id="modelCustom" autocomplete="off" placeholder="например, openrouter/auto"><div class="field-help">В облачном режиме доступны модели твоего провайдера. Доступность зависит от API.</div>
+ <h2>Настрой свой интеллект</h2><p class="desc">Сейчас открыт интерфейс VANTA. Чтобы ИИ начал отвечать, сначала нужен запущенный сервер. Одной регистрации в Cloudflare недостаточно. Не вводи пароль от Cloudflare или GitHub.</p>
+ <label class="field" for="endpoint">Адрес запущенного сервера VANTA</label><input id="endpoint" autocomplete="off" spellcheck="false" placeholder="https://твой-сервер.workers.dev"><div class="field-help">Для телефона нужен HTTPS-адрес твоего сервера. URL появится после его запуска. Локально на ПК можно использовать http://127.0.0.1:8765.</div>
+ <label class="field" for="access">Личный токен входа</label><input id="access" type="password" autocomplete="off" placeholder="Токен, созданный при настройке VANTA"><div class="field-help">Это отдельный секрет VANTA, не пароль Cloudflare. Не сохраняется на диске.</div>
+ <label class="field" for="modelCustom">Свой ID модели (необязательно)</label><input id="modelCustom" autocomplete="off" placeholder="Не заполняй, если не знаешь ID модели"><div class="field-help">Оставь пустым: режимы FAST / SMART / DEEP / MAX выбираются отдельно.</div>
  <label class="field" for="prompt">Характер ИИ / системная инструкция</label><textarea id="prompt" rows="3" maxlength="3500">Ты VANTA AI, личный интеллектуальный помощник. Отвечай вдумчиво, честно, точно и содержательно. Не выдумывай факты. Пиши на языке пользователя.</textarea>
  <label class="row-switch"><input id="ephemeral" type="checkbox"> Приватный сеанс — не записывать историю</label>
  <div class="modal-buttons"><button id="export" class="btn">Экспорт истории</button><button id="clear" class="btn">Очистить историю</button><button id="saveSettings" class="btn accent">Сохранить настройки</button></div>
- <div class="help">Подробная настройка облака: <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/README.md" target="_blank" rel="noopener noreferrer">инструкция</a>. Локальная версия работает через Ollama и Tailscale. Без backend сайт не генерирует ответы.</div>
+ <div class="help">Нужна помощь с запуском? <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/selfhost/README.md" target="_blank" rel="noopener noreferrer">Свой ИИ без API-лимитов</a> · <a href="https://github.com/anime-void-app/anime-void-app.github.io/blob/main/vanta/README.md" target="_blank" rel="noopener noreferrer">Облачное подключение</a>. Пока сервер не запущен, чат и генерация картинок недоступны.</div>
 </dialog>
 
 <dialog id="studio" class="studio-modal" aria-labelledby="studioHeading">
