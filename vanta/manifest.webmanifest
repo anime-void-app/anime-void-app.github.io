@@ -1,0 +1,20 @@
+{
+  "name": "VANTA AI — Independent Intelligence",
+  "short_name": "VANTA AI",
+  "description": "Личный интерфейс к нейросетям с собственными темами, чатами и студией изображений.",
+  "start_url": "/vanta/",
+  "scope": "/vanta/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080910",
+  "theme_color": "#080910",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "vanta-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}
