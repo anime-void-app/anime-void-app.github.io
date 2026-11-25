@@ -46,10 +46,13 @@ def uv_sphere(name, loc, scale, material, seg=32, rings=20):
 def loft(name, rings, material, n=32):
     # rings: (z, rx, ry, center_y); front is negative Y
     verts=[]; faces=[]
-    for z,rx,ry,cy in rings:
+    for z,rx,ry,offset in rings:
+        # Non-zero offsets on limbs mean X placement; centered garments use Y offset.
+        cx=offset if abs(offset)>0.01 else 0.0
+        cy=offset if abs(offset)<=0.01 else 0.0
         for j in range(n):
             a=2*pi*j/n
-            verts.append((rx*cos(a),cy+ry*sin(a),z))
+            verts.append((cx+rx*cos(a),cy+ry*sin(a),z))
     for i in range(len(rings)-1):
         for j in range(n):
             a=i*n+j;b=i*n+(j+1)%n
