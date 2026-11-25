@@ -93,7 +93,7 @@ const values={...defaults};
 function update(){const h=values.height/100,leg=values.legs/100;root.scale.y=h;parts.legL.scale.y=leg;parts.legR.scale.y=leg;parts.legL.position.y=1.02*(1-leg);parts.legR.position.y=1.02*(1-leg);
 parts.bustL.scale.set(.155*values.bust/100,.155*values.bust/100,.135*values.bust/100);parts.bustR.scale.copy(parts.bustL.scale);
 parts.waist.scale.x=.225*values.waist/100;parts.pelvis.scale.x=.315*values.hips/100;parts.skirt.scale.x=values.hips/100;parts.skirt.scale.z=values.hips/100;
-parts.head.scale.x=.28*values.face/100;parts.eyeWhiteL.scale.multiplyScalar(1);parts.eyeWhiteL.scale.set(.075*values.eyes/100,.09*values.eyes/100,.035);parts.eyeWhiteR.scale.set(.075*values.eyes/100,.09*values.eyes/100,.035);
+parts.head.scale.x=.275*values.face/100;parts.chin.scale.x=.16*values.face/100;for(const s of [-1,1]){parts['eyeWhite'+s].scale.set(.078*values.eyes/100,.092*values.eyes/100,.034);parts['iris'+s].scale.set(.043*values.eyes/100,.057*values.eyes/100,.018);parts['pupil'+s].scale.set(.021*values.eyes/100,.034*values.eyes/100,.009);}
 parts.hairBack.scale.y=.42*values.hair/100;document.querySelector('#objects').textContent=scene.children.length+root.children.length;
 }
 const sliders=['height','bust','waist','hips','legs','eyes','face','hair'];sliders.forEach(id=>{const el=document.getElementById(id),out=document.getElementById(id+'-v');el.addEventListener('input',()=>{values[id]=+el.value;out.textContent=el.value+'%';update()})});
